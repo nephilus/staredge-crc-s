@@ -6,7 +6,10 @@ modules:
         - NetworkManager
     - type: containerfile
       snippets:
-        - ADD https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz /usr/bin/crc-linux-amd64.tar.xz
+        - ADD https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz /tmp/crc-linux-amd64.tar.xz
+        - RUN tar -xvf /tmp/crc-linux-amd64.tar.xz -C /tmp
+        - RUN mv /tmp/crc-linux-*-amd64/crc /usr/bin/crc
+        # - RUN /usr/bin/crc setup
     # - type: script
     #   scripts:
     #     - installcrc.sh

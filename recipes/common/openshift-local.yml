@@ -7,9 +7,29 @@ modules:
     - type: containerfile
       snippets:
         - ADD https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz /tmp/crc-linux-amd64.tar.xz
-        - RUN tar -xvf /tmp/crc-linux-amd64.tar.xz -C /tmp
-        - RUN mv /tmp/crc-linux-*-amd64/crc /usr/bin/crc
-        # - RUN /usr/bin/crc setup
+        - RUN tar -xvf /tmp/crc-linux-amd64.tar.xz -C /tmp && mv /tmp/crc-linux-*-amd64/crc /usr/bin && mkdir /var/crcbundles
+        - ADD https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/2.47.0/release-info.json /var/crcbundles
+        - RUN export OPENSHIFT_VERSION=$(jq -r '.version.openshiftVersion' /var/crcbundles/release-info.json) && export FULL_URL="https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/bundles/openshift/${OPENSHIFT_VERSION}/crc_libvirt_${OPENSHIFT_VERSION}_amd64.crcbundle" && wget $FULL_URL -P /var/crcbundles
+        # - RUN curl -o /opt/crcbundles/crc_libvirt_${OPENSHIFT_VERSION}_amd64.crcbundle $FULL_URL
+        # - RUN mkdir /var/home/crc
+        # - RUN groupadd -g 1000 crc && useradd -m -u 1000 -g 1000 -s /bin/bash crc && chown -R crc:crc /var/home/crc && echo "crc:crc" | chpasswd
+        # - RUN usermod -aG wheel crc && echo 'crc ALL=(ALL) NOPASSWD: ALL\' > /etc/sudoers.d/crc
+        # - RUN mkdir -p /var/home/crc/.crc/cache && chown -R crc:crc /var/home/crc/.crc
+
+        # - ADD https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/bundles/openshift/4.17.14/crc_libvirt_4.17.14_amd64.crcbundle /opt/crcbundles
+        # - USER crc
+        # - RUN /opt/crc setup
+        # - RUN useradd -m crc -s /bin/bash
+        # - RUN passwd crc
+        # - RUN usermod -aG wheel crc||sudo usermod -aG sudo crc
+        # - RUN echo "crc ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/crc
+        # - USER crc
+        # - RUN /var/crc/crc setup
+        # # - RUN /usr/local/bin/crc setup
     # - type: script
     #   scripts:
-    #     - installcrc.sh
+    #     - crcuser.sh
+    # - type: containerfile
+    #   snippets:
+    #     - USER crc
+    #     - RUN /var/crc/crc setup

@@ -1,0 +1,9 @@
+modules:
+    - type: containerfile
+      snippets:
+        - RUN flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        - RUN flatpak install -y --or-update flathub org.virt_manager.virt-manager # VM manager
+        - RUN flatpak install -y flathub com.vscodium.codium # vscodium
+        # - RUN flatpak install -y --or-update flathub com.visualstudio.code # vscode
+        # - RUN flatpak install flathub org.libreoffice.LibreOffice # libreoffice
+        # - RUN flatpak install flathub com.github.tchx84.Flatseal # manage flatpak permissions

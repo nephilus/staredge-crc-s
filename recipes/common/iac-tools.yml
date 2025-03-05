@@ -1,0 +1,7 @@
+modules:
+    - type: rpm-ostree
+      install:
+        - ansible
+    - type: containerfile
+      snippets:
+        - ADD https://get.helm.sh/helm-latest-version /usr/bin/helm
